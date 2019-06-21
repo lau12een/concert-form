@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import AddConcert from './AddConcert.js';
+import MyContext from './MyContext.js';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+export default class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          name: '',
+          location: '',
+          date: ''
+        }
+      }
+    
+    addConcert = (name, location, date) => {
+        this.setState({
+          name: [this.state.name, name],
+          location: [this.state.location, location],
+          date: [this.state.date, date],
+        });
+    }
+
+    saveConcertForm(name, location, date) {
+        console.log (name, location, date);
+        this.setState({
+          name, location, date
+        });
+    }
+
+    render(){
+        return (
+        // changes made below //
+        <MyContext.Provider
+            value={{
+                name: this.state.name,
+                location: this.state.location,
+                date: this.state.date,
+                addConcert: this.addConcert,
+            }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+            // end of changes //
+            
+            <div className='concert'>
+                 <AddConcert saveConcertForm={(name, location, date) => this.saveConcertForm(name, location, date)} />
+            </div>
+       </MyContext.Provider>
+        );
+      }
+    }
 
-export default App;
